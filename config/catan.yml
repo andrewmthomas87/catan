@@ -1,0 +1,9 @@
+dev: true
+postgres:
+  host: postgres
+  port: 5432
+  user: postgres
+  dbname: catan
+  password: Asdf1234
+user_server:
+  addr: ":8881"

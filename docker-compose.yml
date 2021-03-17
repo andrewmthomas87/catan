@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  postgres:
+    image: "postgres:latest"
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=Asdf1234
+  auto_migrate:
+    build:
+      context: ./
+      dockerfile: auto_migrate.Dockerfile
+    command:
+      [
+        "./wait-for-it.sh",
+        "postgres:5432",
+        "--",
+        "/go/src/github.com/andrewmthomas87/catan/auto_migrate",
+      ]
+    depends_on:
+      - postgres
+    volumes:
+      - ./config:/home/config
+  user_server:
+    build:
+      context: ./
+      dockerfile: user_server.Dockerfile
+    command:
+      [
+        "./wait-for-it.sh",
+        "postgres:5432",
+        "--",
+        "/go/src/github.com/andrewmthomas87/catan/user_server",
+      ]
+    depends_on:
+      - postgres
+    volumes:
+      - ./config:/home/config
